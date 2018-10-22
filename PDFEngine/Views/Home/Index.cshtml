@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+<button id="RunButton" class="delete-button k-button">Run Reports</button>
+</div>
+
+
+
+@Html.TextBox("Shift")
+
+<div id="Reports">
+
+    @(Html.Kendo().Grid<PDFEngine.Models.vwReportList>()
+    .Name("historygrid")
+    .Selectable(selectable => selectable.Mode(GridSelectionMode.Single).Type(GridSelectionType.Row))
+
+    .Columns(columns =>
+    {
+        columns.Bound(dataReport => dataReport.ReportId).Title("ReportId").Title("ReportID");
+        columns.Bound(dataReport => dataReport.RunId).Title("RunID");
+        columns.Bound(dataReport => dataReport.ReportDescription).Title("Description");
+        columns.Command(command => command.Custom("Show Report").Click("showDetails"));
+    })
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Batch(false)
+    .ServerOperation(false)  // Paging, sorting, filtering and grouping will be done client-side
+        .Model(model =>
+        {
+            model.Id(dataReport => dataReport.ReportId);
+        })
+                    .Read(read => read.Action("Report_List_Read", "Home").Data("myParameterFunction"))
+        )
+        .AutoBind(false)
+        .Sortable()
+        .Navigatable()
+        .HtmlAttributes(new { style = "width:700px;" })
+)
+</div>
+
+@(Html.Kendo().Window().Name("Details")
+    .Title("Report Detail")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(800)    
+    .Iframe(true)
+    .Scrollable(true)
+    )
+
+<script id="delete-confirmation" type="text/x-kendo-template">
+    <p class="delete-message">Proceed with Report Run?</p>
+
+    <button class="delete-confirm k-button">Yes</button>
+    <a href="#" class="delete-cancel">No</a>
+</script>
+
+ <script type="text/x-kendo-template" id="template">
+    <div id="details-container">
+    </div>
+    <iframe src="Home/GetPdf?reportId=#:ReportId#&runId=#:RunId#" width="100%" height="400"></iframe>
+</script>
+
+
+<script type="text/javascript">
+    var myDataValue;
+
+    $('document').ready(function () {
+        $("#historygrid").hide();
+    });
+
+    var detailsTemplate = kendo.template($("#template").html());
+
+    function showDetails(e) {
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var wnd = $("#Details").data("kendoWindow");
+
+        wnd.content(detailsTemplate(dataItem));
+        wnd.center().open();
+    }
+
+    $(".delete-button").click(function (e) {
+        e.preventDefault();
+
+        var kendoWindow = $("<div />").kendoWindow({
+            title: "Confirm",
+            resizable: false,
+            modal: true
+        });
+        kendoWindow.data("kendoWindow")
+            .content($("#delete-confirmation").html())
+            .center().open();
+        @*url: '@Url.Action("ReportRun" , "Home")',*@
+        //url: '/Home/ReportRun',
+
+        kendoWindow
+            .find(".delete-confirm,.delete-cancel")
+                .click(function () {
+                    if ($(this).hasClass("delete-confirm")) {
+                        //alert("Deleting record...");
+                        try {
+                            ///GATHER PARAMETERS
+                            var Shift = $("#Shift").val();
+                        } catch (err) {
+                            alert("Problem with Report Run - Contact Support");
+                            kendoWindow.data("kendoWindow").close();
+                            return;
+                        }
+                        //                                url: "/Home/ReportRun",
+                        try {
+                            $.ajax({
+                                url: '@Url.Action("ReportRun" , "Home")',
+                                type: "POST",
+                                data: JSON.stringify({
+                                    shift: Shift,
+                                }),
+                                dataType: "json",
+                                contentType: "application/json"
+                            }).done(function (data) {
+                                alert("Complete")
+                                myDataValue = data.RunID;
+                                if (data.RunID === parseInt(data.RunID, 10)) {      // If data.PRDateID is numeric, success.   Else, display it.  Will contain message from controller
+                                    var MyGrid = $("#historygrid");
+                                    MyGrid.show();
+                                    MyGrid.data("kendoGrid").dataSource.read();
+                                    // TODO: HIDE BUTTON
+                                } else {
+                                    alert(data.RunID + " Error");
+
+                                }
+                            });
+                        } catch (err) {
+                            alert("Error Processing checks - Contact Support");
+                            kendoWindow.data("kendoWindow").close();
+
+                            return;
+                        }
+                    }
+                    kendoWindow.data("kendoWindow").close();
+                })
+                .end()
+    });
+
+    function myParameterFunction() {
+
+        return {
+            myRunID: myDataValue
+        };
+    }
+
+</script>

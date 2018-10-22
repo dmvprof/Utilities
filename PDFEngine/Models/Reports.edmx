@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Reports.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Customers">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SalesPersonID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Address" Type="nchar" MaxLength="10" />
+          <Property Name="Region" Type="varchar" MaxLength="50" />
+          <Property Name="Contact" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="RunDetails">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RunId" Type="int" />
+          <Property Name="ReportBLOB" Type="varbinary(max)" />
+          <Property Name="ReportDescription" Type="varchar" MaxLength="100" />
+          <Property Name="ReportFilter" Type="int" />
+        </EntityType>
+        <EntityType Name="RunMasters">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RunDate" Type="datetime" />
+          <Property Name="UserName" Type="varchar" MaxLength="20" />
+          <Property Name="Description" Type="varchar" MaxLength="200" />
+          <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityType Name="SalesPersons">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" />
+          <Property Name="Status" Type="varchar" MaxLength="1" />
+          <Property Name="Region" Type="varchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'aspnet-PDFEngine-20141205111936.dbo.vwReportList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vwReportList">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ReportId" Type="int" Nullable="false" />
+          <Property Name="RunId" Type="int" />
+          <Property Name="ReportBLOB" Type="varbinary(max)" />
+          <Property Name="ReportDescription" Type="varchar" MaxLength="100" />
+          <Property Name="ReportFilter" Type="int" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="RunDate" Type="datetime" />
+          <Property Name="UserName" Type="varchar" MaxLength="20" />
+          <Property Name="Description" Type="varchar" MaxLength="200" />
+          <Property Name="Type" Type="int" />
+        </EntityType>
+        <EntityContainer Name="ReportsStoreContainer">
+          <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RunDetails" EntityType="Self.RunDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RunMasters" EntityType="Self.RunMasters" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalesPersons" EntityType="Self.SalesPersons" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vwReportList" EntityType="Self.vwReportList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vwReportList].[ReportId] AS [ReportId], 
+[vwReportList].[RunId] AS [RunId], 
+[vwReportList].[ReportBLOB] AS [ReportBLOB], 
+[vwReportList].[ReportDescription] AS [ReportDescription], 
+[vwReportList].[ReportFilter] AS [ReportFilter], 
+[vwReportList].[Id] AS [Id], 
+[vwReportList].[RunDate] AS [RunDate], 
+[vwReportList].[UserName] AS [UserName], 
+[vwReportList].[Description] AS [Description], 
+[vwReportList].[Type] AS [Type]
+FROM [dbo].[vwReportList] AS [vwReportList]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Reports" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="CustomerID" />
+          </Key>
+          <Property Name="CustomerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalesPersonID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Region" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Contact" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RunDetail">
+          <Key>
+            <PropertyRef Name="ReportId" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="RunId" Type="Int32" />
+          <Property Name="ReportBLOB" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ReportDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ReportFilter" Type="Int32" />
+        </EntityType>
+        <EntityType Name="RunMaster">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="RunDate" Type="DateTime" Precision="3" />
+          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SalesPerson">
+          <Key>
+            <PropertyRef Name="PersonID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="Region" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityContainer Name="Entities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Customers" EntityType="Self.Customer" />
+          <EntitySet Name="RunDetails" EntityType="Self.RunDetail" />
+          <EntitySet Name="RunMasters" EntityType="Self.RunMaster" />
+          <EntitySet Name="SalesPersons" EntityType="Self.SalesPerson" />
+          <EntitySet Name="vwReportLists" EntityType="Reports.vwReportList" />
+        </EntityContainer>
+        <EntityType Name="vwReportList">
+          <Key>
+            <PropertyRef Name="ReportId" />
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ReportId" Type="Int32" Nullable="false" />
+          <Property Name="RunId" Type="Int32" />
+          <Property Name="ReportBLOB" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ReportDescription" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ReportFilter" Type="Int32" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="RunDate" Type="DateTime" Precision="3" />
+          <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="Type" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ReportsStoreContainer" CdmEntityContainer="Entities1">
+          <EntitySetMapping Name="Customers">
+            <EntityTypeMapping TypeName="Reports.Customer">
+              <MappingFragment StoreEntitySet="Customers">
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="SalesPersonID" ColumnName="SalesPersonID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RunDetails">
+            <EntityTypeMapping TypeName="Reports.RunDetail">
+              <MappingFragment StoreEntitySet="RunDetails">
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+                <ScalarProperty Name="RunId" ColumnName="RunId" />
+                <ScalarProperty Name="ReportBLOB" ColumnName="ReportBLOB" />
+                <ScalarProperty Name="ReportDescription" ColumnName="ReportDescription" />
+                <ScalarProperty Name="ReportFilter" ColumnName="ReportFilter" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RunMasters">
+            <EntityTypeMapping TypeName="Reports.RunMaster">
+              <MappingFragment StoreEntitySet="RunMasters">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RunDate" ColumnName="RunDate" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalesPersons">
+            <EntityTypeMapping TypeName="Reports.SalesPerson">
+              <MappingFragment StoreEntitySet="SalesPersons">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Region" ColumnName="Region" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vwReportLists">
+            <EntityTypeMapping TypeName="Reports.vwReportList">
+              <MappingFragment StoreEntitySet="vwReportList">
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="RunDate" ColumnName="RunDate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ReportFilter" ColumnName="ReportFilter" />
+                <ScalarProperty Name="ReportDescription" ColumnName="ReportDescription" />
+                <ScalarProperty Name="ReportBLOB" ColumnName="ReportBLOB" />
+                <ScalarProperty Name="RunId" ColumnName="RunId" />
+                <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

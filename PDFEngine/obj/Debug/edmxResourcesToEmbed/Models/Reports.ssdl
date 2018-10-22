@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Reports.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Customers">
+    <Key>
+      <PropertyRef Name="CustomerID" />
+    </Key>
+    <Property Name="CustomerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SalesPersonID" Type="int" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Address" Type="nchar" MaxLength="10" />
+    <Property Name="Region" Type="varchar" MaxLength="50" />
+    <Property Name="Contact" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="RunDetails">
+    <Key>
+      <PropertyRef Name="ReportId" />
+    </Key>
+    <Property Name="ReportId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RunId" Type="int" />
+    <Property Name="ReportBLOB" Type="varbinary(max)" />
+    <Property Name="ReportDescription" Type="varchar" MaxLength="100" />
+    <Property Name="ReportFilter" Type="int" />
+  </EntityType>
+  <EntityType Name="RunMasters">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RunDate" Type="datetime" />
+    <Property Name="UserName" Type="varchar" MaxLength="20" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Type" Type="int" />
+  </EntityType>
+  <EntityType Name="SalesPersons">
+    <Key>
+      <PropertyRef Name="PersonID" />
+    </Key>
+    <Property Name="PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="50" />
+    <Property Name="Status" Type="varchar" MaxLength="1" />
+    <Property Name="Region" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'aspnet-PDFEngine-20141205111936.dbo.vwReportList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vwReportList">
+    <Key>
+      <PropertyRef Name="ReportId" />
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="ReportId" Type="int" Nullable="false" />
+    <Property Name="RunId" Type="int" />
+    <Property Name="ReportBLOB" Type="varbinary(max)" />
+    <Property Name="ReportDescription" Type="varchar" MaxLength="100" />
+    <Property Name="ReportFilter" Type="int" />
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="RunDate" Type="datetime" />
+    <Property Name="UserName" Type="varchar" MaxLength="20" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
+    <Property Name="Type" Type="int" />
+  </EntityType>
+  <EntityContainer Name="ReportsStoreContainer">
+    <EntitySet Name="Customers" EntityType="Self.Customers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RunDetails" EntityType="Self.RunDetails" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RunMasters" EntityType="Self.RunMasters" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SalesPersons" EntityType="Self.SalesPersons" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vwReportList" EntityType="Self.vwReportList" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vwReportList].[ReportId] AS [ReportId], 
+[vwReportList].[RunId] AS [RunId], 
+[vwReportList].[ReportBLOB] AS [ReportBLOB], 
+[vwReportList].[ReportDescription] AS [ReportDescription], 
+[vwReportList].[ReportFilter] AS [ReportFilter], 
+[vwReportList].[Id] AS [Id], 
+[vwReportList].[RunDate] AS [RunDate], 
+[vwReportList].[UserName] AS [UserName], 
+[vwReportList].[Description] AS [Description], 
+[vwReportList].[Type] AS [Type]
+FROM [dbo].[vwReportList] AS [vwReportList]</DefiningQuery>
+    </EntitySet>
+  </EntityContainer>
+</Schema>
