@@ -1,7 +1,7 @@
 Platform
 
 C#/MVC
-Entity Framework
+Entity Framework 5.0
 Telerik Kendo UI
 Telerik Reporting
 SQLExpress
@@ -17,7 +17,7 @@ Original use case was to save reports generated from month end and year end Gene
 
 To run:
 
-Download all code and the attached database backup file (aspnet-PDFEngine-2014120511936.bak) 
+Download code and the attached database backup file (aspnet-PDFEngine-2014120511936.bak) 
 
 Verify that connection string in Web.Config is correct for your environment.
 
